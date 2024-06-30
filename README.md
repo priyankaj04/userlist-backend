@@ -52,3 +52,8 @@ gunicorn backend.wsgi:application --bind 0.0.0.0:8000
 ```bash
 docker-compose up --build
 ```
+
+### Database Model: 
+<img width="527" alt="Screenshot 2024-07-01 at 5 20 20 AM" src="https://github.com/priyankaj04/userlist-backend/assets/103273242/b64220b4-e151-4afb-981f-3e6505f1b5a8">
+
+### Thankyou
