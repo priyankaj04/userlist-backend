@@ -18,7 +18,7 @@ class FriendshipViewSet(viewsets.ModelViewSet):
     serializer_class = FriendSerializer
 
 @api_view(['POST'])
-def verfiy_user(request):
+def verify_user(request):
     if request.method == 'POST':
         try:
             username = request.data.get('username')
@@ -38,16 +38,16 @@ def verfiy_user(request):
                     user_data = UserSerializer(user).data
                     return Response({"status":1,"message": "User created", "data": user_data}, status=status.HTTP_201_CREATED)
                 else:
-                    return Response({"status":0, "message":serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({"status": 0, "message": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
         except IntegrityError as e:
-            return Response({"status":0,"message": "Integrity error: likely a unique constraint violation."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": 0, "message": "Integrity error: likely a unique constraint violation."}, status=status.HTTP_400_BAD_REQUEST)
         except ValidationError as e:
-            return Response({"status":0,"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"status": 0, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(str(e))
-            return Response({"status":0,"message": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+            return Response({"status": 0, "message": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 @api_view(['GET'])
 def get_friends(request, id):
     try:

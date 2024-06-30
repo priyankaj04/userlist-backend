@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+  nginx:
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - /Users/priyanka/Desktop/Assessment1/frontend/build
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend
+      - api
+
+  frontend:
+    image: node:latest
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm install && npm run build"
+
+  api:
+    image: django-gunicorn-nginx:latest
+    ports:
+      - "8000:8000"
+      - "8001:8001"
