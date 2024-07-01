@@ -17,6 +17,9 @@ class FriendshipViewSet(viewsets.ModelViewSet):
     queryset = Friend.objects.all()
     serializer_class = FriendSerializer
 
+# * Verifies user - If user already exists, it verifies and send user details i.e, with userid 
+# * else It creates new user and send newly created user details
+# * Verification and also Creation of User - table 'User'
 @api_view(['POST'])
 def verify_user(request):
     if request.method == 'POST':
@@ -47,7 +50,11 @@ def verify_user(request):
         except Exception as e:
             print(str(e))
             return Response({"status": 0, "message": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+
+
+# * Once User is verified with their id, Get all the details
+# * List of friends added by user, list of friends that are not added by user, and non friends list
+# * Fetching User Details - table 'User', 'Friend'
 @api_view(['GET'])
 def get_friends(request, id):
     try:
@@ -95,7 +102,11 @@ def get_friends(request, id):
     except Exception as e:
         print(str(e))
         return Response({"status": 0, "message": "An unexpected error occurred"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
+
+
+# * Add Friends
+# * When user addes friends -> insertion to "friend" table
+# * Establishing Friend connection by adding record - table 'Friend'
 @api_view(['POST'])
 def add_friend(request):
     if request.method == 'POST':
@@ -136,6 +147,9 @@ def add_friend(request):
             print(str(e))
             return Response({"status": 0,"message": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+# * Edit Username
+# * Editing username by userid - table 'User'
 @api_view(['PATCH'])
 def edit_username(request):
     if request.method == 'PATCH':
@@ -170,6 +184,11 @@ def edit_username(request):
             print(str(e))
             return Response({"status": 0, "message": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+# ! DELETE RECORD is not good practice, added this api for assessment requirements only !
+# * Remove Friend
+# * Removing friends from user list
+# * Deleteing record in - table 'Friend'
 @api_view(['DELETE'])
 def remove_friend(request, id, friendid):
     if request.method == 'DELETE':
@@ -191,7 +210,10 @@ def remove_friend(request, id, friendid):
             print(str(e))
             return Response({"status": 0, "message": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-
+# ! DELETE RECORD is not good practice, added this api for assessment requirements only !
+# * Deleting User
+# * Removing User - also removing all the connections in friends list.
+# * Deleteing record in - table 'User'
 @api_view(['DELETE'])
 def delete_user(request, id):
     if request.method == 'DELETE':
