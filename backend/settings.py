@@ -56,11 +56,12 @@ MIDDLEWARE = [
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-ALLOWED_HOSTS = ['*.myapp.com', 'http://localhost:3000','localhost']
+ALLOWED_HOSTS = ['https://*.assessment.local','*.assessment.local', 'http://localhost:3000','localhost','http://app.assessment.local','app.assessment.local']
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    'https://*.myapp.com',
+    'https://*.assessment.local',
+    'http://app.assessment.local'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
