@@ -18,13 +18,13 @@ class FriendshipViewSet(viewsets.ModelViewSet):
     serializer_class = FriendSerializer
 
 # * Verifies user - If user already exists, it verifies and send user details i.e, with userid 
-# * else It creates new user and send newly created user details
-# * Verification and also Creation of User - table 'User'
-@api_view(['POST'])
-def verify_user(request):
-    if request.method == 'POST':
+# * else sends as unauthorized
+# * Verification of User - table 'User'
+@api_view(['GET'])
+def verify_user(request, username):
+    if request.method == 'GET':
         try:
-            username = request.data.get('username')
+            username = username
             if not username:
                 return Response({"status": 0, "message": "Username is required."}, status=status.HTTP_400_BAD_REQUEST)
             
@@ -34,6 +34,33 @@ def verify_user(request):
                 # User exists, generate and send token
                 user_data = UserSerializer(user).data
                 return Response({"status":1, "message": 'user verified', "data": user_data}, status=status.HTTP_200_OK)
+            else :
+                return Response({"status":2,"message": "User does not exists"}, status=status.HTTP_201_CREATED)
+
+        except IntegrityError as e:
+            return Response({"status": 0, "message": "Integrity error: likely a unique constraint violation."}, status=status.HTTP_400_BAD_REQUEST)
+        except ValidationError as e:
+            return Response({"status": 0, "message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(str(e))
+            return Response({"status": 0, "message": "An unexpected error occurred."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+# * Creates users 
+# * checks if user already exists - if user exists then it returns with status 0 else Creates new user
+# * Creation of User - table 'User'
+@api_view(['POST'])
+def create_user(request):
+    if request.method == 'POST':
+        try:
+            username = request.data.get('username')
+            if not username:
+                return Response({"status": 0, "message": "Username is required."}, status=status.HTTP_400_BAD_REQUEST)
+            
+            user = User.objects.filter(username=username).first()
+
+            if user:
+                return Response({"status":0, "message": 'User already exists'}, status=status.HTTP_200_OK)
             else :
                 serializer = UserSerializer(data={'username': username})
                 if serializer.is_valid():
